@@ -1,4 +1,4 @@
-## Using modern authentication with CSOM for .NET Standard
+### Using modern authentication with CSOM for .NET Standard
 
 Using user/password based authentication which was a so called cookie based authentication, implemented via the `SharePointOnlineCredentials` class, is a common approach for developers using CSOM for .NET Framework. In CSOM for .NET Standard this isn't possible anymore, it's up to the developer using CSOM for .NET Standard to obtain an OAuth access token and use that when making calls to SharePoint Online. The recommended approach for getting access tokens for SharePoint Online is by setting up an Azure AD application. For CSOM for .NET Standard the only thing that matters are that you obtain a valid access token, this can be using resource owner password credential flow, using device login, using certificate based auth,...  
 
@@ -17,3 +17,6 @@ Below steps will help you create and configure an application in Azure Active Di
 - Select **Authentication** in the left navigation
 - Change **Allow public client flows** from No to **Yes**
 - Select **Overview** and copy the application ID to the clipboard (you'll need it later on)
+
+### References
+- https://docs.microsoft.com/en-us/sharepoint/dev/sp-add-ins/using-csom-for-dotnet-standard
