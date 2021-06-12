@@ -18,5 +18,10 @@ Below steps will help you create and configure an application in Azure Active Di
 - Change **Allow public client flows** from No to **Yes**
 - Select **Overview** and copy the application ID to the clipboard (you'll need it later on)
 
+### Configuring Service Principle
+- Generate Certificate using [CreateCertificate.ps1](/CreateCertificate.ps1)
+- In App registration >> Go to the registered Azure AD App
+- Select Certificates & Secrets and Upload .Cer file there. Make a note of Thumbprint ID
+
 ### References
 - https://docs.microsoft.com/en-us/sharepoint/dev/sp-add-ins/using-csom-for-dotnet-standard
