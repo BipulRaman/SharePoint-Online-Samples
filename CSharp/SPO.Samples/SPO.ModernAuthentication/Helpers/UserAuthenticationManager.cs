@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace SPO.ModernAuthentication.AuthHelpers
+namespace SPO.ModernAuthentication.Helpers
 {
     public class UserAuthenticationManager : IDisposable
     {
