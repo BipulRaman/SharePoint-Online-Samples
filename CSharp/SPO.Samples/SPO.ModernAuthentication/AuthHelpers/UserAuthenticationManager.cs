@@ -9,9 +9,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace SPO.ModernAuthentication
+namespace SPO.ModernAuthentication.AuthHelpers
 {
-    public class AuthenticationManager : IDisposable
+    public class UserAuthenticationManager : IDisposable
     {
         private static readonly HttpClient httpClient = new HttpClient();
         private const string tokenEndpoint = "https://login.microsoftonline.com/common/oauth2/token";

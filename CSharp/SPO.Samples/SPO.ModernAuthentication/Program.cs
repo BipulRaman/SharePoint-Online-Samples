@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SPO.ModernAuthentication.AuthHelpers;
+using System;
 using System.Security;
 using System.Threading.Tasks;
 
@@ -8,13 +9,18 @@ namespace SPO.ModernAuthentication
     {
         public static async Task Main(string[] args)
         {
+            await DelegatedUserAuthTest();
+        }
+
+        public static async Task DelegatedUserAuthTest()
+        {
             Console.WriteLine("Hello World!");
             Uri site = new Uri("https://m365x706493.sharepoint.com/sites/TeamSite01");
             string user = "admin@M365x706493.onmicrosoft.com";
             SecureString password = ConvertToSecureString("");
 
             // Note: The PnP Sites Core AuthenticationManager class also supports this
-            using (var authenticationManager = new AuthenticationManager())
+            using (var authenticationManager = new UserAuthenticationManager())
             using (var context = authenticationManager.GetContext(site, user, password))
             {
                 context.Load(context.Web);
