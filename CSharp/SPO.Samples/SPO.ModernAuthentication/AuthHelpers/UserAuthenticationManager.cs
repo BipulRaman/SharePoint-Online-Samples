@@ -16,8 +16,6 @@ namespace SPO.ModernAuthentication.AuthHelpers
         private static readonly HttpClient httpClient = new HttpClient();
         private const string tokenEndpoint = "https://login.microsoftonline.com/common/oauth2/token";
 
-        private const string defaultAADAppId = "31359c7f-bd7e-475c-86db-fdb8c937548e";
-
         // Token cache handling
         private static readonly SemaphoreSlim semaphoreSlimTokens = new SemaphoreSlim(1);
         private AutoResetEvent tokenResetEvent = null;
@@ -29,13 +27,13 @@ namespace SPO.ModernAuthentication.AuthHelpers
             public RegisteredWaitHandle Handle = null;
         }
 
-        public ClientContext GetContext(Uri web, string userPrincipalName, SecureString userPassword)
+        public ClientContext GetContext(Uri web, string userPrincipalName, SecureString userPassword, string clientId)
         {
             var context = new ClientContext(web);
 
             context.ExecutingWebRequest += (sender, e) =>
             {
-                string accessToken = EnsureAccessTokenAsync(new Uri($"{web.Scheme}://{web.DnsSafeHost}"), userPrincipalName, new System.Net.NetworkCredential(string.Empty, userPassword).Password).GetAwaiter().GetResult();
+                string accessToken = EnsureAccessTokenAsync(new Uri($"{web.Scheme}://{web.DnsSafeHost}"), userPrincipalName, new System.Net.NetworkCredential(string.Empty, userPassword).Password, clientId).GetAwaiter().GetResult();
                 e.WebRequestExecutor.RequestHeaders["Authorization"] = "Bearer " + accessToken;
             };
 
@@ -43,7 +41,7 @@ namespace SPO.ModernAuthentication.AuthHelpers
         }
 
 
-        public async Task<string> EnsureAccessTokenAsync(Uri resourceUri, string userPrincipalName, string userPassword)
+        public async Task<string> EnsureAccessTokenAsync(Uri resourceUri, string userPrincipalName, string userPassword, string clientId)
         {
             string accessTokenFromCache = TokenFromCache(resourceUri, tokenCache);
             if (accessTokenFromCache == null)
@@ -52,7 +50,7 @@ namespace SPO.ModernAuthentication.AuthHelpers
                 try
                 {
                     // No async methods are allowed in a lock section
-                    string accessToken = await AcquireTokenAsync(resourceUri, userPrincipalName, userPassword).ConfigureAwait(false);
+                    string accessToken = await AcquireTokenAsync(resourceUri, userPrincipalName, userPassword, clientId).ConfigureAwait(false);
                     Console.WriteLine($"Successfully requested new access token resource {resourceUri.DnsSafeHost} for user {userPrincipalName}");
                     AddTokenToCache(resourceUri, tokenCache, accessToken);
 
@@ -111,11 +109,10 @@ namespace SPO.ModernAuthentication.AuthHelpers
             }
         }
 
-        private async Task<string> AcquireTokenAsync(Uri resourceUri, string username, string password)
+        private async Task<string> AcquireTokenAsync(Uri resourceUri, string username, string password, string clientId)
         {
             string resource = $"{resourceUri.Scheme}://{resourceUri.DnsSafeHost}";
 
-            var clientId = defaultAADAppId;
             var body = $"resource={resource}&client_id={clientId}&grant_type=password&username={HttpUtility.UrlEncode(username)}&password={HttpUtility.UrlEncode(password)}";
             using (var stringContent = new StringContent(body, Encoding.UTF8, "application/x-www-form-urlencoded"))
             {
