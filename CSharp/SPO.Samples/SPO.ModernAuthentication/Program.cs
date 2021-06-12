@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Security;
 using System.Threading.Tasks;
-using SPO.AuthWithAADAppWithDelegatedPermissions.Helpers;
 
-namespace SPO.AuthWithAADAppWithDelegatedPermissions
+namespace SPO.ModernAuthentication
 {
     class Program
     {

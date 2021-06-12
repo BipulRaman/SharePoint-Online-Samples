@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace SPO.AuthWithAADAppWithDelegatedPermissions.Helpers
+namespace SPO.ModernAuthentication
 {
     public class AuthenticationManager : IDisposable
     {
