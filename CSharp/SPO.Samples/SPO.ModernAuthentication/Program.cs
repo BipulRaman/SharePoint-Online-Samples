@@ -1,4 +1,5 @@
-﻿using SPO.ModernAuthentication.Helpers;
+﻿using Microsoft.Extensions.Configuration;
+using SPO.ModernAuthentication.Helpers;
 using System;
 using System.Security;
 using System.Threading.Tasks;
@@ -9,20 +10,27 @@ namespace SPO.ModernAuthentication
     {
         public static async Task Main(string[] args)
         {
-            // Scenario 1 : By User Authentication for Deligated Access
-            await DelegatedUserAuthTest();
+            IConfiguration config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .Build();
 
-            // Scenario 2 : By Service Principal Authentication for Application Access
-            await ServicePrincipalAuthTest();
+            // Scenario 1 : By User Authentication for Deligated Access
+            await DelegatedUserAuthTest(config);
+
+            // Scenario 2 : By Service Principal Authentication for Application Access using Cert Thumprint
+            await ServicePrincipalAuthTestUsingCertThumbprint(config);
+
+            // Scenario 3 : By Service Principal Authentication for Application Access using Cert Path
+            await ServicePrincipalAuthTestUsingCertPath(config);            
         }
 
-        public static async Task DelegatedUserAuthTest()
+        public static async Task DelegatedUserAuthTest(IConfiguration config)
         {
             Console.WriteLine("Testing : Delegated User Auth Test");
-            Uri site = new Uri("https://m365x706493.sharepoint.com/sites/TeamSite01");
-            string clientId = "31359c7f-bd7e-475c-86db-fdb8c937548e";
-            string user = "admin@M365x706493.onmicrosoft.com";
-            SecureString password = Utilities.ConvertToSecureString("");
+            Uri site = new Uri(config["Scenario01:SiteUrl"]);
+            string clientId = config["Scenario01:ClientId"];
+            string user = config["Scenario01:UserName"];
+            SecureString password = Utilities.ConvertToSecureString(config["Scenario01:Password"]);
 
             // Note: The PnP Sites Core AuthenticationManager class also supports this
             using (var authenticationManager = new UserAuthenticationManager())
@@ -34,34 +42,37 @@ namespace SPO.ModernAuthentication
             }
         }
 
-        public static async Task ServicePrincipalAuthTest()
+        public static async Task ServicePrincipalAuthTestUsingCertThumbprint(IConfiguration config)
         {
             Console.WriteLine("Testing : ServicePrincipal Auth Test");
-            Uri site = new Uri("https://m365x706493.sharepoint.com/sites/TeamSite01");
-            string clientId = "3a13e474-c67f-4ee4-a1ba-a62d42f1934e";
-            string tenantId = "6d0ecd4e-9354-4baf-a69c-2242a179a5d3";
-
-            // Option -1 : Using Cert Thumbprint
-            Console.WriteLine("Testing : Using Certificate Thumbprint");
-            string certThumbprint = "E8FDE3DDC4C8167F8D99D4F1E3FC312FB3193ECD";
-            var cert1 = CertificateHelper.GetCertificateByThumbprint(certThumbprint);
+            Uri site = new Uri(config["Scenario02:SiteUrl"]);
+            string clientId = config["Scenario02:ClientId"];
+            string tenantId = config["Scenario02:TenantId"];
+            string certtificateThumbprint = config["Scenario02:CertificateThumbprint"];
+            var certtificate = CertificateHelper.GetCertificateByThumbprint(certtificateThumbprint);
 
             using (var authenticationManager = new ServicePrincipalAuthenticationManager())
-            using (var context = authenticationManager.GetContext(site, tenantId, clientId, cert1))
+            using (var context = authenticationManager.GetContext(site, tenantId, clientId, certtificate))
             {
                 context.Load(context.Web);
                 await context.ExecuteQueryAsync();
                 Console.WriteLine($"Title: {context.Web.Title}");
             }
+        }
 
-            // Option - 2 : Using Certificate PFX file and it's password.
-            Console.WriteLine("Testing : Using Certificate PFX File and Password");
-            SecureString certPassword = Utilities.ConvertToSecureString("");
-            var cert2 = CertificateHelper.GetCertificateFromPath("D:\\SPODemo02.pfx", certPassword);
+        public static async Task ServicePrincipalAuthTestUsingCertPath(IConfiguration config)
+        {
+            Console.WriteLine("Testing : ServicePrincipal Auth Test");
+            Uri site = new Uri(config["Scenario03:SiteUrl"]);
+            string clientId = config["Scenario03:ClientId"];
+            string tenantId = config["Scenario03:TenantId"];
+            string certificatePath = config["Scenario03:CertificatePath"];
+            SecureString certificatePassword = Utilities.ConvertToSecureString(config["Scenario03:CertificatePassword"]);            
+            var certificate = CertificateHelper.GetCertificateFromPath(certificatePath, certificatePassword);
 
             // Note: The PnP Sites Core AuthenticationManager class also supports this
             using (var authenticationManager = new ServicePrincipalAuthenticationManager())
-            using (var context = authenticationManager.GetContext(site, tenantId, clientId, cert2))
+            using (var context = authenticationManager.GetContext(site, tenantId, clientId, certificate))
             {
                 context.Load(context.Web);
                 await context.ExecuteQueryAsync();
