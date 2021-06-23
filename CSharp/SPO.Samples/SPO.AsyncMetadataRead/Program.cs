@@ -47,7 +47,7 @@ namespace SPO.AsyncMetadataRead
                     listUrl,
                     new AsyncReadOptions
                     {
-                        IncludeDirectDescendantsOnly = true,
+                        IncludeDirectDescendantsOnly = false,
                         IncludeSecurity = true,
                     },
                     null,
