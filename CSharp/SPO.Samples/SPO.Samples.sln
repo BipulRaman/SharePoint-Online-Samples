@@ -5,7 +5,9 @@ VisualStudioVersion = 17.0.31410.414
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SPO.ModernAuthentication", "SPO.ModernAuthentication\SPO.ModernAuthentication.csproj", "{6CECD31C-9738-4E09-81B2-2120A427315F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPO.AsyncMetadataRead", "SPO.AsyncMetadataRead\SPO.AsyncMetadataRead.csproj", "{6AE49ACA-88E8-47E4-92E2-C8AA769FFFD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SPO.AsyncMetadataRead", "SPO.AsyncMetadataRead\SPO.AsyncMetadataRead.csproj", "{6AE49ACA-88E8-47E4-92E2-C8AA769FFFD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPO.ModernAuth", "SPO.ModernAuth\SPO.ModernAuth.csproj", "{E41E4710-E56B-47B8-9060-6FF3CABE3AFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{6AE49ACA-88E8-47E4-92E2-C8AA769FFFD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AE49ACA-88E8-47E4-92E2-C8AA769FFFD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AE49ACA-88E8-47E4-92E2-C8AA769FFFD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E41E4710-E56B-47B8-9060-6FF3CABE3AFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E41E4710-E56B-47B8-9060-6FF3CABE3AFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E41E4710-E56B-47B8-9060-6FF3CABE3AFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E41E4710-E56B-47B8-9060-6FF3CABE3AFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
