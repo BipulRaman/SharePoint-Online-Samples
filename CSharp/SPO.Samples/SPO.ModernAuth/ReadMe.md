@@ -19,9 +19,10 @@ Below steps will help you create and configure an application in Azure Active Di
 - Select **Overview** and copy the application ID to the clipboard (you'll need it later on)
 
 ### Configuring Service Principle (Required only for Service Principal Based i.e. App-Only Auth Scenario)
-- Generate Certificate using [CreateCertificate.ps1](CreateCertificate.ps1)
+- Generate Certificate using [CreateCertificate.ps1](CreateCertificate.ps1) and make a note of the certificate password
 - In App registration >> Go to the registered Azure AD App
 - Select Certificates & Secrets and Upload .Cer file there. Make a note of Thumbprint ID
+- Note: You need to install certificate *.pfx file on every machine wherever you want to execute the code for authentication
 
 ### References
 - https://docs.microsoft.com/en-us/sharepoint/dev/sp-add-ins/using-csom-for-dotnet-standard
